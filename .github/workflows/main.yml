@@ -1,0 +1,34 @@
+name: Daily Content Bot
+
+on:
+  schedule:
+    - cron: "0 6 * * *"  # 06:00 UTC = 08:00 PL czasu
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+
+      - name: Run main.py
+        run: python main.py
+
+      - name: Commit and push
+        run: |
+          git config user.name "Petfix Bot"
+          git config user.email "ecomcisek@gmail.com"
+          git add .
+          git commit -m "📦 Daily video content: ${{ github.run_number }}"
+          git push

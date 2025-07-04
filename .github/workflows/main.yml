@@ -25,10 +25,14 @@ jobs:
       - name: Run main.py
         run: python main.py
 
-      - name: Commit and push
-        run: |
-          git config user.name "Petfix Bot"
-          git config user.email "ecomcisek@gmail.com"
-          git add .
-          git commit -m "📦 Daily video content: ${{ github.run_number }}"
-          git push
+- name: Commit and push
+  env:
+    TOKEN: ${{ secrets.GH_TOKEN }}
+  run: |
+    git config user.name "Petfix Bot"
+    git config user.email "bot@petfix.com"
+    git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}
+    git add .
+    git commit -m "📦 Daily video content: ${{ steps.date.outputs.date }}"
+    git push
+

@@ -24,14 +24,18 @@ jobs:
 
       - name: Run main.py
         run: python main.py
-        
+
+      - name: Get current date
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
       - name: Commit and push
-    env:
-    GH_TOKEN: ${{ secrets.GH_TOKEN }}
-    run: |
-    git config user.name "Petfix Bot"
-    git config user.email "bot@petfix.com"
-    git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}
-    git add .
-    git commit -m "📦 Daily video content: ${{ steps.date.outputs.date }}"
-    git push origin HEAD:main
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          git config user.name "Petfix Bot"
+          git config user.email "bot@petfix.com"
+          git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}
+          git add .
+          git commit -m "📦 Daily video content: ${{ steps.date.outputs.date }}"
+          git push origin HEAD:main

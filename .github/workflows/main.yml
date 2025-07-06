@@ -25,12 +25,13 @@ jobs:
       - name: Run main.py
         run: python main.py
 
-      - name: Commit and push changes
+      - name: Commit and push
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          git config --global user.name "Petfix Bot"
-          git config --global user.email "bot@petfix.com"
+          git config user.name "Petfix Bot"
+          git config user.email "bot@petfix.com"
           git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}
           git add .
-          git diff --quiet && git diff --staged --quiet || git commit -m "📦 Daily video content: $(date +'%Y-%m
+          git commit -m "📦 Daily video content: $(date +'%Y-%m-%d')" || echo "Nothing to commit"
+          git push origin HEAD:main

@@ -1,29 +1,19 @@
-name: Daily Content Bot
+name: Test Push Bot
 
 on:
-  schedule:
-    - cron: "0 6 * * *"  # 06:00 UTC = 08:00 PL
   workflow_dispatch:
 
 jobs:
-  build:
+  push-test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.11
-
-      - name: Install dependencies
+      - name: Create test file
         run: |
-          pip install --upgrade pip
-
-      - name: Run main.py
-        run: python main.py
+          echo "Push test $(date)" > .push_test.txt
 
       - name: Commit and push
         env:
@@ -32,6 +22,6 @@ jobs:
           git config user.name "Petfix Bot"
           git config user.email "bot@petfix.com"
           git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}
-          git add .
-          git commit -m "📦 Daily video content: $(date +'%Y-%m-%d')" || echo "Nothing to commit"
+          git add .push_test.txt
+          git commit -m "✅ Push test from GitHub Actions"
           git push origin HEAD:main
